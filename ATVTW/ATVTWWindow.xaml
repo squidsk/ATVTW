@@ -1,0 +1,132 @@
+﻿<Window x:Class="ATVTW.ATVTWWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:local="clr-namespace:ATVTW"
+        Title="ATVTW" Width="800" Height="600" Icon="Resources/ATVTW.ico">
+    <Window.CommandBindings>
+        <!--<CommandBinding Command="{x:Static local:TWCommands.CreateSetting}" CanExecute="CommandCanExecute" Executed="ChooseSetting" />-->
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="CommandCanExecute" Executed="OpenSetting" />
+        <CommandBinding Command="ApplicationCommands.New" CanExecute="CommandCanExecute" Executed="NewSetting" />
+        <CommandBinding Command="ApplicationCommands.Close" CanExecute="CommandCanExecute" Executed="ExitProgram" />
+        <CommandBinding Command="{x:Static local:TWCommands.About}" CanExecute="CommandCanExecute" Executed="About" />
+        <!--<CommandBinding Command="ApplicationCommands.Save" CanExecute="SaveCanExecute" Executed="SaveFile" />
+        <CommandBinding Command="ApplicationCommands.SaveAs" CanExecute="CommandNeedsSettingsToExecute" Executed="SaveFileAs" />
+        <CommandBinding Command="ApplicationCommands.Cut" CanExecute="CanCutOrCopy" Executed="Cut" />
+        <CommandBinding Command="ApplicationCommands.Copy" CanExecute="CanCutOrCopy" Executed="Copy" />
+        <CommandBinding Command="{x:Static local:TWCommands.Validate}" CanExecute="CommandNeedsSettingsToExecute" Executed="Validate" />
+        <CommandBinding Command="{x:Static local:TWCommands.StopForWarnings}" CanExecute="CommandCanExecute" Executed="StopForWarnings" />
+        <CommandBinding Command="{x:Static local:TWCommands.AutoIndent}" CanExecute="CanValidate" Executed="AutoIndent" /> -->
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Gesture="CTRL+ALT+S" Command="{x:Static ApplicationCommands.SaveAs}" />
+        <KeyBinding Gesture="ALT+F4" Command="{x:Static ApplicationCommands.Close}" />
+        <KeyBinding Key="F3" Modifiers="Shift" Command="Search" CommandParameter="backSearch" />
+    </Window.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New Settings" Command="ApplicationCommands.New">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/tsbNew.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Open Settings" Command="ApplicationCommands.Open">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/tsbLoad.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="E_xit" Command="ApplicationCommands.Close" InputGestureText="Alt+F4" />
+            </MenuItem>
+            <MenuItem Header="_Search">
+                <MenuItem Header="Find" />
+                <MenuItem Header="Find _Next" />
+                <MenuItem Header="Find _Previous" />
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="Traits"/>
+                <MenuItem Header="Trait Triggers"/>
+                <MenuItem Header="Ancillaries"/>
+                <MenuItem Header="Ancillary Triggers"/>
+                <MenuItem Header="Orphans"/>
+                <MenuItem Header="PreBattle Speeces"/>
+                <MenuItem Header="Scripts"/>
+            </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem Header="Generate Enumeration Files"/>
+                <MenuItem Header="Stop For Warnings"/>
+                <MenuItem Header="Check Ancillary Images"/>
+                <MenuItem Header="Validate Files"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Command="{x:Static local:TWCommands.About}" />
+            </MenuItem>
+        </Menu>
+        <ToolBarTray Grid.Row="1" IsLocked="True" ToolBar.OverflowMode="Never">
+            <ToolBar Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ToolBarTray}}}">
+                <ToolBar.Resources>
+                    <Style TargetType="{x:Type Image}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ButtonBase}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
+                                <Setter Property="Opacity" Value="0.30" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
+                                <Setter Property="Opacity" Value="0.30" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToolBar.Resources>
+                <Button ToolTip="Create a settings" Command="New">
+                    <Image Source="Resources/tsbNew.png" />
+                </Button>
+                <Button ToolTip="Open Settings" Command="Open">
+                    <Image Source="Resources/tsbLoad.png" />
+                </Button>
+                <Separator/>
+                <Button ToolTip="Previous Item">
+                    <Image Source="Resources/tsbPreviousItem.png" Height="16" Width="16" />
+                </Button>
+                <Button ToolTip="Next Item">
+                    <Image Source="Resources/tsbNextItem.png" Height="16" Width="16" />
+                </Button>
+                <Separator/>
+                <Button ToolTip="Toggle message visibility">
+                    <Image Source="Resources/LightbulbOn.png" Height="16" Width="16" />
+                </Button>
+                <Separator/>
+                <Button ToolTip="Parse Files">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/tsbParse.png" />
+                        <TextBlock Margin="2 0 0 0">Parse Files</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Next Problem">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/tsbCheckGameFiles.png" />
+                        <TextBlock Margin="2 0 0 0">Next Problem</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="Search">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/tsbSearch.png" />
+                        <TextBlock Margin="2 0 0 0">Find</TextBlock>
+                        <TextBox Margin="2 0 0 0" Width="150px"></TextBox>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+
+        </ToolBarTray>
+        <ad:DockingManager x:Name="DockManager" Grid.Row="2">
+
+        </ad:DockingManager>
+        <StatusBar Grid.Row="3">
+            <StatusBarItem Name="StatusItem" Content="ATVTW"/>
+        </StatusBar>
+    </Grid>
+</Window>
